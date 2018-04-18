@@ -42,37 +42,50 @@ public class ReceiveTaskTest {
         System.out.println("流程实例ID:" + pi.getId());//流程实例ID    101
         System.out.println("流程定义ID:" + pi.getProcessDefinitionId());//流程定义ID   helloworld:1:4
 
+    }
+
+    /**
+     * 启动流程实例+设置流程变量+获取流程变量+向后执行一步
+     */
+    @Test
+    public void queryExecution() {
         /**查询执行对象ID*/
-        Execution execution1 = processEngine.getRuntimeService()//
+        Execution execution = processEngine.getRuntimeService()//
                 .createExecutionQuery()//创建执行对象查询
-                .processInstanceId(pi.getId())//使用流程实例ID查询
-                .activityId("receivetask1")//当前活动的id，对应receiveTask.bpmn文件中的活动节点id的属性值
+//                .processInstanceId(pi.getId())//使用流程实例ID查询
+                .activityId("receivetask2")//当前活动的id，对应receiveTask.bpmn文件中的活动节点id的属性值
                 .singleResult();
+        System.out.println(execution.getId());
+        System.out.println(execution.getDescription());
+        System.out.println(execution.getName());
+        System.out.println(execution.getProcessInstanceId());
+        System.out.println(execution.getTenantId());
+        System.out.println(execution.getActivityId());
+        System.out.println(execution.getParentId());
+        System.out.println(execution.getSuperExecutionId());
+    }
 
-        /**使用流程变量设置当日销售额，用来传递业务参数*/
-        processEngine.getRuntimeService()//
-                .setVariable(execution1.getId(), "汇总当日销售额", 21000);
-
-        /**向后执行一步，如果流程处于等待状态，使得流程继续执行*/
-        processEngine.getRuntimeService()
-                .signal(execution1.getId());
-
+    /**
+     * 启动流程实例+设置流程变量+获取流程变量+向后执行一步
+     */
+    @Test
+    public void completeProcessInstance() {
         /**查询执行对象ID*/
-        Execution execution2 = processEngine.getRuntimeService()//
+        Execution execution = processEngine.getRuntimeService()//
                 .createExecutionQuery()//创建执行对象查询
-                .processInstanceId(pi.getId())//使用流程实例ID查询
                 .activityId("receivetask2")//当前活动的id，对应receiveTask.bpmn文件中的活动节点id的属性值
                 .singleResult();
 
+        /**使用流程变量设置当日销售额，用来传递业务参数*/
+//        processEngine.getRuntimeService()//
+//                .setVariable(execution.getId(), "汇总当日销售额", 21000);
+
         /**从流程变量中获取汇总当日销售额的值*/
         Integer value = (Integer) processEngine.getRuntimeService()//
-                .getVariable(execution2.getId(), "汇总当日销售额");
+                .getVariable(execution.getId(), "汇总当日销售额");
         System.out.println("给老板发送短信：金额是：" + value);
-        /**向后执行一步，如果流程处于等待状态，使得流程继续执行*/
-        processEngine.getRuntimeService()
-                .signal(execution2.getId());
 
+//        /**向后执行一步，如果流程处于等待状态，使得流程继续执行*/
+        processEngine.getRuntimeService().signal(execution.getId());
     }
-
-
 }
