@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
+import com.oceanleo.activiti.z_print.PrintUtils;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -68,18 +69,7 @@ public class ProcessInstanceTest {
 //						.count()//返回结果集的数量
 //						.listPage(firstResult, maxResults);//分页查询
                 .list();//返回列表
-        if (list != null && list.size() > 0) {
-            for (Task task : list) {
-                System.out.println("任务ID:" + task.getId());
-                System.out.println("任务名称:" + task.getName());
-                System.out.println("任务的创建时间:" + task.getCreateTime());
-                System.out.println("任务的办理人:" + task.getAssignee());
-                System.out.println("流程实例ID：" + task.getProcessInstanceId());
-                System.out.println("执行对象ID:" + task.getExecutionId());
-                System.out.println("流程定义ID:" + task.getProcessDefinitionId());
-                System.out.println("########################################################");
-            }
-        }
+        PrintUtils.printTask(list);
     }
 
     /**
@@ -121,30 +111,7 @@ public class ProcessInstanceTest {
                 .createHistoricTaskInstanceQuery()//创建历史任务实例查询
                 .taskAssignee(taskAssignee)//指定历史任务的办理人
                 .list();
-        if (list != null && list.size() > 0) {
-            for (HistoricTaskInstance hti : list) {
-                System.out.println("Id:"+hti.getId());
-                System.out.println("Name:"+hti.getName());
-                System.out.println("ProcessInstanceId:"+hti.getProcessInstanceId());
-                System.out.println("StartTime:"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(hti.getStartTime()));
-                System.out.println("EndTime:"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(hti.getEndTime()));
-                System.out.println("DurationInMillis:"+hti.getDurationInMillis());
-                System.out.println("DeleteReason:"+hti.getDeleteReason());
-                System.out.println("Assignee:"+hti.getAssignee());
-                System.out.println("Category:"+hti.getCategory());
-                System.out.println("Description:"+hti.getDescription());
-                System.out.println("ExecutionId:"+hti.getExecutionId());
-                System.out.println("FormKey:"+hti.getFormKey());
-                System.out.println("Owner:"+hti.getOwner());
-                System.out.println("ParentTaskId:"+hti.getParentTaskId());
-                System.out.println("ProcessDefinitionId:"+hti.getProcessDefinitionId());
-                System.out.println("ProcessInstanceId:"+hti.getProcessInstanceId());
-                System.out.println("TaskDefinitionKey:"+hti.getTaskDefinitionKey());
-                System.out.println("TenantId:"+hti.getTenantId());
-//                System.out.println(hti.getId() + "    " + hti.getName() + "    " + hti.getProcessInstanceId() + "   " + hti.getStartTime() + "   " + hti.getEndTime() + "   " + hti.getDurationInMillis());
-                System.out.println("################################");
-            }
-        }
+        PrintUtils.printHistoricTaskInstance(list);
     }
 
     /**

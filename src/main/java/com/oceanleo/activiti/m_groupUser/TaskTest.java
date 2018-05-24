@@ -1,19 +1,18 @@
 package com.oceanleo.activiti.m_groupUser;
 
-import java.io.InputStream;
-import java.util.List;
-
+import com.oceanleo.activiti.z_print.PrintUtils;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.history.HistoricIdentityLink;
-import org.activiti.engine.impl.persistence.entity.GroupEntity;
-import org.activiti.engine.impl.persistence.entity.UserEntity;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.junit.Test;
+
+import java.io.InputStream;
+import java.util.List;
 
 public class TaskTest {
 
@@ -37,16 +36,18 @@ public class TaskTest {
         /**添加用户角色组*/
         IdentityService identityService = processEngine.getIdentityService();//
         //创建角色
-        identityService.saveGroup(new GroupEntity("总经理"));
-        identityService.saveGroup(new GroupEntity("部门经理"));
-        //创建用户
-        identityService.saveUser(new UserEntity("张三"));
-        identityService.saveUser(new UserEntity("李四"));
-        identityService.saveUser(new UserEntity("王五"));
+        //activiti 5和6版本有区别
+
+//        identityService.saveGroup(new GroupEntity("总经理"));
+//        identityService.saveGroup(new GroupEntity("部门经理"));
+//        //创建用户
+//        identityService.saveUser(new UserEntity("张三"));
+//        identityService.saveUser(new UserEntity("李四"));
+//        identityService.saveUser(new UserEntity("王五"));
         //建立用户和角色的关联关系
-        identityService.createMembership("张三", "部门经理");
-        identityService.createMembership("李四", "部门经理");
-        identityService.createMembership("王五", "总经理");
+//        identityService.createMembership("张三", "部门经理");
+//        identityService.createMembership("李四", "部门经理");
+//        identityService.createMembership("王五", "总经理");
         System.out.println("添加组织机构成功");
     }
 
@@ -78,18 +79,7 @@ public class TaskTest {
                 .orderByTaskCreateTime().asc()//使用创建时间的升序排列
                 /**返回结果集*/
                 .list();//返回列表
-        if (list != null && list.size() > 0) {
-            for (Task task : list) {
-                System.out.println("任务ID:" + task.getId());
-                System.out.println("任务名称:" + task.getName());
-                System.out.println("任务的创建时间:" + task.getCreateTime());
-                System.out.println("任务的办理人:" + task.getAssignee());
-                System.out.println("流程实例ID：" + task.getProcessInstanceId());
-                System.out.println("执行对象ID:" + task.getExecutionId());
-                System.out.println("流程定义ID:" + task.getProcessDefinitionId());
-                System.out.println("########################################################");
-            }
-        }
+        PrintUtils.printTask(list);
     }
 
     /**
@@ -106,18 +96,7 @@ public class TaskTest {
                 .orderByTaskCreateTime().asc()//使用创建时间的升序排列
                 /**返回结果集*/
                 .list();//返回列表
-        if (list != null && list.size() > 0) {
-            for (Task task : list) {
-                System.out.println("任务ID:" + task.getId());
-                System.out.println("任务名称:" + task.getName());
-                System.out.println("任务的创建时间:" + task.getCreateTime());
-                System.out.println("任务的办理人:" + task.getAssignee());
-                System.out.println("流程实例ID：" + task.getProcessInstanceId());
-                System.out.println("执行对象ID:" + task.getExecutionId());
-                System.out.println("流程定义ID:" + task.getProcessDefinitionId());
-                System.out.println("########################################################");
-            }
-        }
+        PrintUtils.printTask(list);
     }
 
     /**

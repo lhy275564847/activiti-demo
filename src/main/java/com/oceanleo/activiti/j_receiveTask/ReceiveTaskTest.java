@@ -86,6 +86,7 @@ public class ReceiveTaskTest {
         System.out.println("给老板发送短信：金额是：" + value);
 
 //        /**向后执行一步，如果流程处于等待状态，使得流程继续执行*/
-        processEngine.getRuntimeService().signal(execution.getId());
+//        processEngine.getRuntimeService().signal(execution.getId());
+        processEngine.getRuntimeService().signalEventReceived("",execution.getId());
     }
 }

@@ -2,6 +2,7 @@ package com.oceanleo.activiti.a_helloworld;
 
 import java.util.List;
 
+import com.oceanleo.activiti.z_print.PrintUtils;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.repository.Deployment;
@@ -18,6 +19,7 @@ public class HelloWorld {
      */
     @Test
     public void deploymentProcessDefinition() {
+        System.out.println(processEngine);
         Deployment deployment = processEngine.getRepositoryService()//与流程定义和部署对象相关的Service
                 .createDeployment()//创建一个部署对象
                 .name("helloworld入门程序")//添加部署的名称
@@ -52,18 +54,7 @@ public class HelloWorld {
                 .createTaskQuery()//创建任务查询对象
 //                .taskAssignee(assignee)//指定个人任务查询，指定办理人
                 .list();
-        if (list != null && list.size() > 0) {
-            for (Task task : list) {
-                System.out.println("任务ID:" + task.getId());
-                System.out.println("任务名称:" + task.getName());
-                System.out.println("任务的创建时间:" + task.getCreateTime());
-                System.out.println("任务的办理人:" + task.getAssignee());
-                System.out.println("流程实例ID：" + task.getProcessInstanceId());
-                System.out.println("执行对象ID:" + task.getExecutionId());
-                System.out.println("流程定义ID:" + task.getProcessDefinitionId());
-                System.out.println("########################################################");
-            }
-        }
+        PrintUtils.printTask(list);
     }
 
     /**

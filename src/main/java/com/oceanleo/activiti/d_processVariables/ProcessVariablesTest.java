@@ -3,6 +3,7 @@ package com.oceanleo.activiti.d_processVariables;
 import java.io.InputStream;
 import java.util.List;
 
+import com.oceanleo.activiti.z_print.PrintUtils;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
@@ -58,18 +59,7 @@ public class ProcessVariablesTest {
         //任务ID
         String taskId = "105004";
         List<Task> taskList = taskService.createTaskQuery().list();
-        if (taskList != null && taskList.size() > 0) {
-            for (Task task : taskList) {
-                System.out.println("任务ID:" + task.getId());
-                System.out.println("任务名称:" + task.getName());
-                System.out.println("任务的创建时间:" + task.getCreateTime());
-                System.out.println("任务的办理人:" + task.getAssignee());
-                System.out.println("流程实例ID：" + task.getProcessInstanceId());
-                System.out.println("执行对象ID:" + task.getExecutionId());
-                System.out.println("流程定义ID:" + task.getProcessDefinitionId());
-                System.out.println("########################################################");
-            }
-        }
+        PrintUtils.printTask(taskList);
 
         /**一：设置流程变量，使用基本数据类型*/
 //		taskService.setVariableLocal(taskId, "请假天数", 5);//与任务ID绑定

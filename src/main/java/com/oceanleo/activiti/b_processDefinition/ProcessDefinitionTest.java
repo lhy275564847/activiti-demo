@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import com.oceanleo.activiti.z_print.PrintUtils;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.repository.Deployment;
@@ -73,18 +74,7 @@ public class ProcessDefinitionTest {
 //						.singleResult();//返回惟一结果集
 //						.count();//返回结果集数量
 //						.listPage(firstResult, maxResults);//分页查询
-        if (list != null && list.size() > 0) {
-            for (ProcessDefinition pd : list) {
-                System.out.println("流程定义ID:" + pd.getId());//流程定义的key+版本+随机生成数
-                System.out.println("流程定义的名称:" + pd.getName());//对应helloworld.bpmn文件中的name属性值
-                System.out.println("流程定义的key:" + pd.getKey());//对应helloworld.bpmn文件中的id属性值
-                System.out.println("流程定义的版本:" + pd.getVersion());//当流程定义的key值相同的相同下，版本升级，默认1
-                System.out.println("资源名称bpmn文件:" + pd.getResourceName());
-                System.out.println("资源名称png文件:" + pd.getDiagramResourceName());
-                System.out.println("部署对象ID：" + pd.getDeploymentId());
-                System.out.println("#########################################################");
-            }
-        }
+        PrintUtils.printProcessDefinition(list);
     }
 
     /**
@@ -93,7 +83,7 @@ public class ProcessDefinitionTest {
     @Test
     public void deleteProcessDefinition() {
         //使用部署ID，完成删除
-        String deploymentId = "75001";
+        String deploymentId = "5001";
         /**
          * 不带级联的删除
          *    只能删除没有启动的流程，如果流程启动，就会抛出异常
@@ -165,18 +155,7 @@ public class ProcessDefinitionTest {
             }
         }
         List<ProcessDefinition> pdList = new ArrayList<ProcessDefinition>(map.values());
-        if (pdList != null && pdList.size() > 0) {
-            for (ProcessDefinition pd : pdList) {
-                System.out.println("流程定义ID:" + pd.getId());//流程定义的key+版本+随机生成数
-                System.out.println("流程定义的名称:" + pd.getName());//对应helloworld.bpmn文件中的name属性值
-                System.out.println("流程定义的key:" + pd.getKey());//对应helloworld.bpmn文件中的id属性值
-                System.out.println("流程定义的版本:" + pd.getVersion());//当流程定义的key值相同的相同下，版本升级，默认1
-                System.out.println("资源名称bpmn文件:" + pd.getResourceName());
-                System.out.println("资源名称png文件:" + pd.getDiagramResourceName());
-                System.out.println("部署对象ID：" + pd.getDeploymentId());
-                System.out.println("#########################################################");
-            }
-        }
+        PrintUtils.printProcessDefinition(pdList);
     }
 
     /**
