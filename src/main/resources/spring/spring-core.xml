@@ -1,0 +1,68 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+    <property name="driverClass" value="oracle.jdbc.OracleDriver"/>
+    <property name="url" value="jdbc:oracle:thin:@localhost:1521/orcl"/>
+    <property name="username" value="oceanleo"/>
+    <property name="password" value="oceanleo"/>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <!--引擎配置对象-->
+  <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+    <!--数据源-->
+    <property name="dataSource" ref="dataSource"/>
+    <!--事物管理-->
+    <property name="transactionManager" ref="transactionManager"/>
+    <!--数据库表策略-->
+    <property name="databaseSchemaUpdate" value="true"/>
+    <!--Job执行器-->
+    <property name="jobExecutorActivate" value="false"/>
+    <!--流程历史数据策略-->
+    <property name="history" value="audit"/>
+    <!--配置部署缓存-->
+    <property name="processDefinitionCacheLimit" value="10"/>
+    <!--事件监听-->
+    <property name="eventListeners">
+      <list>
+        <bean class="com.oceanleo.spring.MyEventListener"/>
+      </list>
+    </property>
+    <!--指定类型事件监听-->
+    <property name="typedEventListeners">
+      <map>
+        <entry key="JOB_EXECUTION_SUCCESS,JOB_EXECUTION_FAILURE">
+          <list>
+            <bean class="com.oceanleo.spring.MyJobEventListener"/>
+            <bean class="com.oceanleo.spring.MyEventListener"/>
+          </list>
+        </entry>
+      </map>
+    </property>
+    <!--注入的bean-->
+    <property name="beans">
+      <map>
+        <entry key="spring" value-ref="spring"/>
+      </map>
+    </property>
+  </bean>
+
+  <!--流程引擎-->
+  <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+    <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+  </bean>
+
+  <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+  <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+  <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+  <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
+  <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+
+  <bean id="spring" class="com.oceanleo.spring.Spring"/>
+</beans>
